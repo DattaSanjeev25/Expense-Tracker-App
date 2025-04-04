@@ -160,7 +160,9 @@ namespace ExpenseTracker.API.Controllers
                 }
 
                 transaction.UserId = userId;
-                transaction.CreatedAt = DateTime.UtcNow;
+                // transaction.CreatedAt = DateTime.UtcNow;
+                transaction.CreatedAt = transaction.CreatedAt != default ? transaction.CreatedAt : DateTime.UtcNow;
+
 
                 var createdTransaction = await _transactionService.CreateTransactionAsync(transaction);
                 _logger.LogInformation("Transaction created successfully: {@Transaction}", createdTransaction);

@@ -124,12 +124,16 @@ export class TransactionComponent implements OnInit, OnDestroy {
           this.isLoading = false;
           return;
         }
-        
-        const transaction: Omit<Transaction, 'id' | 'createdAt' | 'updatedAt'> = {
+        const rawDate = new Date(formValue.date);
+
+        const localDate = new Date(rawDate.getTime() - rawDate.getTimezoneOffset() * 60000);
+
+        const transaction: Omit<Transaction, 'id' | 'updatedAt'> = {
           amount: Number(formValue.amount),
           description: formValue.description.trim(),
           type: formValue.isCredit ? TransactionType.Income : TransactionType.Expense,
-          userId: user.id
+          userId: user.id,
+          createdAt: localDate
         };
         
         this.transactionService.createTransaction(transaction)
